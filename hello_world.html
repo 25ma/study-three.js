@@ -11,8 +11,9 @@
 	<body onload="init()">
 	</body>
 	<script src="https://cdn.bootcss.com/three.js/92/three.js"></script>
+	<script src="http://www.wjceo.com/lib/js/libs/stats.min.js"></script>
 	<script type="application/javascript">
-		var renderer, camera, scene, geometry, material, mesh;
+		var renderer, camera, scene, geometry, material, mesh, stats;
 		// 初始化渲染器
 		function initRenderer(){
 		 	renderer = new THREE.WebGLRenderer();
@@ -41,6 +42,12 @@
 			scene.add(mesh); //将网格添加到场景
 		}
 		
+		//性能检测框
+		function initStats() {
+			stats = new Stats();
+			document.body.appendChild(stats.dom);
+		}
+		
 		//运行动画
 		function animate()
 		{
@@ -57,6 +64,7 @@
 			initScene();
 			initCamere();
 			initMesh();
+			initStats();
 	
 			animate();
 		}
