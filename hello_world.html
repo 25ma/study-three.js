@@ -12,8 +12,9 @@
 	</body>
 	<script src="https://cdn.bootcss.com/three.js/92/three.js"></script>
 	<script src="http://www.wjceo.com/lib/js/libs/stats.min.js"></script>
+	<script src="https://cdn.bootcss.com/dat-gui/0.7.1/dat.gui.min.js"></script>
 	<script type="application/javascript">
-		var renderer, camera, scene, geometry, material, mesh, stats;
+		var renderer, camera, scene, geometry, material, mesh, stats, controls, gui;
 		// 初始化渲染器
 		function initRenderer(){
 		 	renderer = new THREE.WebGLRenderer();
@@ -52,9 +53,33 @@
 		function animate()
 		{
 			requestAnimationFrame(animate); //循环调用函数
-			mesh.rotation.x += 0.01;//每帧网格模型的沿x轴旋转0.01弧度
-			mesh.rotation.y += 0.02; //每帧网格模型的沿y轴旋转0.02弧度
+			mesh.rotation.x += 0.05;//每帧网格模型的沿x轴旋转0.01弧度
+			mesh.rotation.y += 0.06; //每帧网格模型的沿y轴旋转0.02弧度
+			mesh.rotation.z += 0.01;
+			// mesh.rotation.x += Math.PI; //模型沿x旋转180度
+			// mesh.rotation.y += Math.PI * 2; //模型沿y轴旋转360度，跟没旋转一样的效果。。。
+			// mesh.rotation.z += Math.PI / 2;
+			// mesh.rotation.set(Math.PI, 0, - Math.PI / 2, "YZX");
+			stats.update(); //更新性能检测框
 			renderer.render(scene, camera);
+		}
+		
+		//创建调试框
+		function initGui() {
+			controls = {
+				positionX:0,
+				positionY:0,
+				positionZ:0
+			};
+	
+			gui = new dat.GUI();
+			gui.add(controls, "positionX", -1, 1).onChange(updatePosition);
+			gui.add(controls, "positionY", -1, 1).onChange(updatePosition);
+			gui.add(controls, "positionZ", -1, 1).onChange(updatePosition);
+	
+			function updatePosition() {
+				mesh.position.set(controls.positionX, controls.positionY, controls.positionZ);
+			}
 		}
 		
 		// 初始化函数，页面加载完成再调用
@@ -65,6 +90,7 @@
 			initCamere();
 			initMesh();
 			initStats();
+			initGui();
 	
 			animate();
 		}
